@@ -1,15 +1,10 @@
-# Basic Sample Hardhat Project
+# Luckzy
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+The Dapp basically is a lottery game where a player is chosen at random and wins the entire lottery pool. 
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
+## Tech Stack
+- Solidity
+- Hardhat
+- Ethereum
+- Graph
+- React
