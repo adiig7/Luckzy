@@ -56,6 +56,13 @@ contract RandomWinnerGame is VRFConsumerBase, Ownable{
         gameStarted = false;
     }
     
-    
+    function getRandomWinner() private returns (bytes32 requestId) {
+        require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK");
+        return requestRandomness(keyHash, fee);
+    }
+
+    receive() external payable {}
+
+    fallback() external payable {}
 
 }
