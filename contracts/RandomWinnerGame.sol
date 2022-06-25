@@ -23,5 +23,39 @@ contract RandomWinnerGame is VRFConsumerBase, Ownable{
         fee = vrfFee;
         gameStarted = false;
     }
+    
+    // function called when the game starts
+      function startGame(uint8 _maxPlayers, uint256 _entryFee) public onlyOwner {
+        require(!gameStarted, "Game is currently running");
+        delete players;
+        maxPlayers = _maxPlayers;
+        gameStarted = true;
+        entryFee = _entryFee;
+        gameId += 1;
+        emit GameStarted(gameId, maxPlayers, entryFee);
+    }
+    
+    // function called when a player joins the game
+    function joinGame() public payable {
+        require(gameStarted, "Game has not been started yet");
+        require(msg.value == entryFee, "Value sent is not equal to entryFee");
+        require(players.length < maxPlayers, "Game is full");
+        players.push(msg.sender);
+        emit PlayerJoined(gameId, msg.sender);
+        if(players.length == maxPlayers) {
+            getRandomWinner();
+        }
+    }
+    
+     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal virtual override  {
+        uint256 winnerIndex = randomness % players.length;
+        address winner = players[winnerIndex];
+        (bool sent,) = winner.call{value: address(this).balance}("");
+        require(sent, "Failed to send Ether");
+        emit GameEnded(gameId, winner,requestId);
+        gameStarted = false;
+    }
+    
+    
 
 }
